@@ -1,0 +1,86 @@
+/* CSS for styling the form */
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.form-header {
+    text-align: center;
+    margin: 1; /* Reset margin to remove default spacing */
+}
+
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.form-group {
+    flex-basis: calc(33.33% - 10px);
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.form-group input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.form-group select {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left:10px ;
+}
+.form-group1 {
+    flex-basis: calc(33.33% - 10px);
+    margin-bottom: 10px;
+}
+
+.form-group1 label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.form-group1 input {
+    width: 80%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.form-group1 select {
+    width: 80%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-more {
+    cursor: pointer;
+    color: blue;
+}
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Adjust margin as needed */
+}

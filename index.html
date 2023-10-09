@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Work Tracker</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="data.js"></script>
+</head>
+<body>
+    <div class="form-container">
+        <h2 class="form-header">Aetx Consulting Pvt Ltd </h2>
+        <h2 class="form-header">Daily Work Tracker</h2>
+        <form id="workForm" action="#" method="post" name = "submit-to-google-sheet">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="EmployeeCode">Employee Code</label>
+                    <select id="EmployeeCode" name="EmployeeCode" list = "EmployeeCode"required> 
+                        <datalist id="EmployeeCode" class="EmployeeCode"></datalist>
+                   </select>
+                </div>
+                <div class="form-group">
+                    <label for="EmployeeName">Employee Name</label>
+                    <input type="text" id="EmployeeName" name="EmployeeName" list="EmployeeName" readonly required>
+                    <datalist id="EmployeeName" class="EmployeeName"></datalist>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="Date">Date</label>
+                    <input type="Date" id="Date" name="Date" readonly required>
+                </div>
+            </div>
+
+            <!-- Client Worked, Time, Project/Tasks -->
+            <div class="form-row">
+                <div class="form-group1" id="client-worked-group">
+                    <label for="clientWorked">Client Worked</label>
+                    <select id="clientWorked" name="clientWorked[]" list="clientWorked" required>
+                        <datalist id="clientWorked" class="clientWorked" ></datalist>
+                    </select>
+                </div>
+                <div class="form-group1" id = "time-group">
+                    <label for="workTime">Time</label>
+                    <select  id="workTime" name="workTime[]" list="workTime" required>
+                        <datalist id="workTime" class="workTime" ></datalist>
+                    </select>
+                </div>
+                <div class="form-group1" id = "projects-todos-group" >
+                    <label for="projectTasks">Project/Tasks</label>
+                    <input type="text" id="projectTasks" name="projectTasks[]" required>
+                </div>
+            </div>
+
+            <!-- Add more button -->
+            <div class="form-row">
+                <div class="form-group">
+                    <button class="add-more" id="addMore" onclick="addInput()">+</button>
+                </div>
+            </div>
+
+            <div class="submit">
+                <div class="form-group">
+                    <input type="submit" value="Submit" id="submitButton">
+                </div>
+            </div>
+            <!-- Add this div for the success message -->
+            <div id="success-message" class="success-message" style="display: none;">
+                Successfully submitted!
+            </div>
+
+        </form>
+    </div>
+
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script>
+       document.addEventListener('DOMContentLoaded',function(){
+            const employeeNameInput = document.getElementById('EmployeeName');
+            const employeeCodeInput = document.getElementById('EmployeeCode');
+            
+            employeeCodeInput.addEventListener('change',function(){
+                //To get the Selected Employee Code
+                const selectedEployeeCode = employeeCodeInput.value;
+                //To find the Correspondinng employee name in the EmployeeName Select List
+                const datalistoptions = document.querySelectorAll('#EmployeeName option');
+                const codeoptions = document.querySelectorAll('#EmployeeCode option');
+                for(let i = 0;i<datalistoptions.length;i++){
+                    if(codeoptions[i].value === selectedEployeeCode){
+                        //set the Employee name Input element's value to the corresponding Employee Name
+                        employeeNameInput.value = datalistoptions[i].text;
+                        break;
+                        }
+                    }    
+               });
+        });
+    // Call the function to set today's date when the page loads
+        setTodaysDate();
+    // Function to add more input fields for all groups
+            function addInput() {
+                // Specify the IDs of all the groups you want to clone
+                const groupIds = ['client-worked-group', 'time-group', 'projects-todos-group'];
+
+                // Clone and insert input fields for each group
+                groupIds.forEach(groupName => {
+                    const group = document.getElementById(groupName);
+                    const inputClone = group.querySelector('input , select').cloneNode(true);
+                    // Clear the input field for the new entry
+                    inputClone.value = '';
+                    group.insertBefore(inputClone, group.querySelector('button'));
+                });
+            }
+            function setTodaysDate() {
+            const dateInput = document.getElementById('Date');
+             const today = new Date();
+             const year = today.getFullYear();
+             const month = String(today.getMonth() + 1).padStart(2, '0'); // Adding 1 to month because it's zero-based
+            const day = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+            dateInput.value = formattedDate;
+            }
+
+            //To Submit the form In the Google Excel Sheet 
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxnm67XusUiuZRJGIvubrmIU6xc8ywRIRt-H1zhKeYDU7EMQ-Og7nm2LLPjxT_ZvCo/exec'
+            const form = document.forms['submit-to-google-sheet']
+             let isSubmitted = false;
+
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                if (!isSubmitted) {
+                // Disable the submit button to prevent further submissions
+                submitButton.disabled = true;
+
+                // Set the submitted flag to true
+                isSubmitted = true;
+
+                // Rest of your code for form submission and success message
+                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                    .then(response => {
+                        console.log('Success!', response);
+                        // Display the success message
+                        const successMessage = document.getElementById('success-message');
+                        successMessage.style.display = 'block';
+                    })
+                .catch(error => console.error('Error!', error.message))
+            }
+        });
+</script>
+
+</body>
+</html>
